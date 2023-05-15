@@ -1,0 +1,33 @@
+import music_tag
+import zmq
+
+context = zmq.Context()
+socket = context.socket(zmq.REP)
+socket.bind("tcp://*:7854")
+
+while True:
+    message = socket.recv().decode()
+    print(f"File received! Storing mp3 data into an object for use.")
+
+    #message should be path to the file
+    f = music_tag.load_file("sample-6s.mp3")
+
+    trackTitle = f["tracktitle"]
+    trackAlbum = f["album"]
+    trackArtist = f["artist"]
+    trackNumber = f["tracknumber"]
+
+    socket.send_pyobj([trackTitle, trackAlbum, trackArtist, trackNumber])
+
+    '''
+    These other options are also available, feel free to use which ones you need. Be sure to
+    add any used to the socket.send statement above. For even more check here:
+    https://pypi.org/project/music-tag/
+    
+    trackYear = f["year"]
+    totalTracks = f["totaltrack"]
+    discNumber = f["discNumber"]
+    totalDiscs = f["totaldiscs"]
+    trackGenre = f["genre"]
+    
+    '''
