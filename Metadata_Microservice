@@ -7,15 +7,18 @@ socket.bind("tcp://*:7854")
 
 while True:
     message = socket.recv().decode()
-    print(f"File received! Storing mp3 data into an object for use.")
+    print(f"File received! Loading file...")
 
     #message should be path to the file
     f = music_tag.load_file("sample-6s.mp3")
+    print(f"File loaded! Extracting music data.."
 
     trackTitle = f["tracktitle"]
     trackAlbum = f["album"]
     trackArtist = f["artist"]
     trackNumber = f["tracknumber"]
+    
+    print(f"Data extracted! Sending data back to main program.")
 
     socket.send_pyobj([trackTitle, trackAlbum, trackArtist, trackNumber])
 
